@@ -17,7 +17,7 @@ resource "aws_db_instance" "porteiro" {
   custom_iam_instance_profile = null
   customer_owned_ip_enabled   = false
   db_name                     = null
-  db_subnet_group_name        = aws_db_subnet_group.bia.name
+  db_subnet_group_name        = aws_db_subnet_group.porteiro.name
   dedicated_log_volume        = false
   delete_automated_backups    = true
   deletion_protection         = false
@@ -37,7 +37,7 @@ resource "aws_db_instance" "porteiro" {
   identifier_prefix                     = null
   instance_class                        = "db.t3.micro"
   iops                                  = null
-  kms_key_id                            = "arn:aws:kms:us-east-1:307946647826:key/11c82a1c-7bd2-42f3-be72-e98a7d63eff8"
+  kms_key_id                            = var.db_kms
   license_model                         = "postgresql-license"
   maintenance_window                    = "thu:05:35-thu:06:05"
   manage_master_user_password           = true
@@ -52,7 +52,7 @@ resource "aws_db_instance" "porteiro" {
   parameter_group_name                  = "default.postgres16"
   password                              = null # sensitive
   performance_insights_enabled          = true
-  performance_insights_kms_key_id       = "arn:aws:kms:us-east-1:307946647826:key/11c82a1c-7bd2-42f3-be72-e98a7d63eff8"
+  performance_insights_kms_key_id       = var.db_kms
   performance_insights_retention_period = 7
   port                                  = 5432
   publicly_accessible                   = false
@@ -68,14 +68,10 @@ resource "aws_db_instance" "porteiro" {
   timezone                              = null
   upgrade_storage_config                = null
   username                              = "postgres"
-  vpc_security_group_ids = [
-    aws_security_group.bia_db.id,
-    aws_security_group.bia_dev.id,
-    aws_security_group.bia_web.id
-  ]
+  vpc_security_group_ids = [ aws_security_group.porteiro.id ]
 }
 
-resource "aws_db_subnet_group" "bia" {
+resource "aws_db_subnet_group" "porteiro" {
   name = "bia_subnet_group"
   subnet_ids = [var.subnet_id_a, var.subnet_id_b]
 

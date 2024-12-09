@@ -8,11 +8,7 @@ resource "aws_security_group" "porteiro_db" {
     to_port     = 5432
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    security_groups = [
-      aws_security_group.bia_web.id,
-      aws_security_group.bia_ec2.id,
-      aws_security_group.bia_alb.id
-      ]
+    security_groups = [aws_security_group.porteiro.id]
     self = false
   }
 
